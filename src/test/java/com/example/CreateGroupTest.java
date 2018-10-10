@@ -67,6 +67,7 @@ public class CreateGroupTest {
         lOGGER.info("创建node:{}",nodeName);
         util.create(groupName+"/"+nodeName);
         lOGGER.info("成功创建node:{}",nodeName);
+        util.close();
 
     }
     //列出成员。
@@ -78,6 +79,7 @@ public class CreateGroupTest {
         children.forEach(child->{
             lOGGER.info("子节点:{}",child);
         });
+        util.close();
 
     }
     //强制删除path及下面的所有成员
@@ -86,6 +88,7 @@ public class CreateGroupTest {
         CreateGroupUtil util = new CreateGroupUtil();
         util.connect(HOST);
         util.forceDelete("/"+GROUP_NAME);
+        util.close();
     }
 
 }
