@@ -25,13 +25,42 @@ public class CreateGroupUtil {
     }
 
     /**
-     * 创建断连即删组
+     * 创建组，默认断连即删组
      * @param groupName
      * @throws KeeperException
      * @throws InterruptedException
      */
-    public void create(String groupName) throws KeeperException, InterruptedException {
-        zk.create("/"+groupName,null, ZooDefs.Ids.OPEN_ACL_UNSAFE,CreateMode.EPHEMERAL);
+    public void create(String groupName) throws Exception {
+        create(groupName,CreateMode.EPHEMERAL);
+    }
+
+    /**
+     * 指定模式创建zknode或组
+     * @param name
+     * @param mode
+     * @throws Exception
+     */
+    public void create(String name,CreateMode mode) throws Exception{
+        zk.create("/"+name,null, ZooDefs.Ids.OPEN_ACL_UNSAFE,mode);
+    }
+
+
+    /**
+     * 创建断连即删组
+     * @param name
+     * @throws Exception
+     */
+    public void createEphemeral(String name) throws Exception{
+        create(name);
+    }
+
+    /**
+     * 创建持久化node或组
+     * @param name
+     * @throws Exception
+     */
+    public void createPersist(String name) throws Exception{
+        create(name,CreateMode.PERSISTENT);
     }
 
     /**
@@ -40,6 +69,16 @@ public class CreateGroupUtil {
      */
     public void close() throws InterruptedException {
         zk.close();
+    }
+
+    /**
+     * 判断节点存在
+     * @param path
+     * @return
+     * @throws Exception
+     */
+    public boolean exists(String path) throws Exception {
+        return null!=zk.exists(path,false);
     }
 
 }
