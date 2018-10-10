@@ -6,6 +6,8 @@ import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 
+import java.util.List;
+
 /**
  * 先connect,再create，再close。
  */
@@ -81,4 +83,24 @@ public class CreateGroupUtil {
         return null!=zk.exists(path,false);
     }
 
+    //列出path下的成员
+    public List<String> listChilds(String path) throws Exception{
+        return zk.getChildren(path,false);
+    }
+
+    //强制删除path及下的成员
+    public void forceDelete(String path) throws Exception {
+        List<String> children = listChilds(path);
+        if(null!=children&&children.size()>0){
+            children.forEach(child->{
+                try {
+                    forceDelete(path+"/"+child);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        //版本号指定-1代表强制删除。
+        zk.delete(path,-1);
+    }
 }

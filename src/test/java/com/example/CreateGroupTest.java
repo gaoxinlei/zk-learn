@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,6 +17,7 @@ public class CreateGroupTest {
     private static final String HOST = "192.168.0.57";
     private static final String GROUP_NAME = "zk_test";
     private static final String NODE_NAME = "zk_node";
+    //测试创建一个临时组。
     @Test
     public void testCreateGroup(){
         CreateGroupUtil util = new CreateGroupUtil();
@@ -44,6 +46,7 @@ public class CreateGroupTest {
         lOGGER.info("成功创建组:{}",GROUP_NAME);
     }
 
+    //测试向某一个组加入一个临时node，若组不存在，建立一个永久组。
     @Test
     public void testJoinGroup() throws Exception {
         CreateGroupUtil util = new CreateGroupUtil();
@@ -66,4 +69,23 @@ public class CreateGroupTest {
         lOGGER.info("成功创建node:{}",nodeName);
 
     }
+    //列出成员。
+    @Test
+    public void testLsMembers() throws Exception{
+        CreateGroupUtil util = new CreateGroupUtil();
+        util.connect(HOST);
+        List<String> children = util.listChilds("/");
+        children.forEach(child->{
+            lOGGER.info("子节点:{}",child);
+        });
+
+    }
+    //强制删除path及下面的所有成员
+    @Test
+    public void testForceDelete() throws Exception{
+        CreateGroupUtil util = new CreateGroupUtil();
+        util.connect(HOST);
+        util.forceDelete("/"+GROUP_NAME);
+    }
+
 }
